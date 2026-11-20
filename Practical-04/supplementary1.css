@@ -1,0 +1,42 @@
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #eaf2f8;
+}
+
+.container {
+    width: 500px;
+    margin: 40px auto;
+    padding: 25px;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 0 10px gray;
+}
+
+h1, h2, h3 {
+    text-align: center;
+    color: #1a5276;
+}
+
+input {
+    width: 95%;
+    padding: 10px;
+    margin: 10px 0;
+}
+
+button {
+    padding: 10px;
+    margin: 5px;
+    background-color: #2874a6;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.student {
+    padding: 10px;
+    margin-top: 10px;
+    background: #f2f3f4;
+    border-radius: 5px;
+}
