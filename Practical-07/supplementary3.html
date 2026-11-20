@@ -1,0 +1,68 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Library Book Management System</title>
+    <link rel="stylesheet" href="supplementary3.css">
+</head>
+<body>
+
+    <div class="container">
+
+        <h1>Library Book Management System</h1>
+
+        <form id="bookForm">
+
+            <input type="hidden" id="bookId">
+
+            <input type="text" id="title"
+                placeholder="Book Title" required>
+
+            <input type="text" id="author"
+                placeholder="Author Name" required>
+
+            <input type="text" id="isbn"
+                placeholder="ISBN Number" required>
+
+            <input type="text" id="category"
+                placeholder="Book Category" required>
+
+            <input type="number" id="quantity"
+                placeholder="Quantity" min="1" required>
+
+            <button type="submit" id="submitBtn">
+                Add Book
+            </button>
+
+        </form>
+
+        <h2>Search Books</h2>
+
+        <input type="text" id="search"
+            placeholder="Search by title or author">
+
+        <h2>Library Book Records</h2>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>ISBN</th>
+                    <th>Title</th>
+                    <th>Author</th>
+                    <th>Category</th>
+                    <th>Quantity</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+
+            <tbody id="bookList"></tbody>
+        </table>
+
+        <p id="message"></p>
+
+    </div>
+
+    <script src="supplementary3.js"></script>
+
+</body>
+</html>

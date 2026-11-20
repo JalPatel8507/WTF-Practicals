@@ -1,0 +1,60 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Student Information Management System</title>
+    <link rel="stylesheet" href="supplementary1.css">
+</head>
+<body>
+
+    <div class="container">
+
+        <h1>Student Information Management</h1>
+
+        <form id="studentForm">
+
+            <input type="text" id="rollNo"
+                placeholder="Roll Number" required>
+
+            <input type="text" id="name"
+                placeholder="Student Name" required>
+
+            <input type="email" id="email"
+                placeholder="Email Address" required>
+
+            <input type="text" id="course"
+                placeholder="Course" required>
+
+            <input type="number" id="semester"
+                placeholder="Semester" min="1" max="8" required>
+
+            <button type="submit" id="submitBtn">
+                Add Student
+            </button>
+
+        </form>
+
+        <h2>Student Records</h2>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Roll No.</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Course</th>
+                    <th>Semester</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+
+            <tbody id="studentList">
+            </tbody>
+        </table>
+
+    </div>
+
+    <script src="supplementary1.js"></script>
+
+</body>
+</html>
