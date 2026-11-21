@@ -1,0 +1,45 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Security Analysis</title>
+    <link rel="stylesheet" href="supplementary1.css">
+</head>
+<body>
+
+    <div class="container">
+        <h1>Login Security Analysis</h1>
+        <p>Analysis of security weaknesses in a simple login module.</p>
+
+        <div class="login-box">
+            <h2>Sample Login Module</h2>
+            <form>
+                <input type="email" placeholder="Enter Email">
+                <input type="password" placeholder="Enter Password">
+                <button type="submit">Login</button>
+            </form>
+        </div>
+
+        <h2>Potential Security Weaknesses</h2>
+        <ul>
+            <li>Plain-text password storage.</li>
+            <li>SQL Injection attacks.</li>
+            <li>Weak password requirements.</li>
+            <li>No protection against repeated login attempts.</li>
+            <li>No secure HTTPS connection.</li>
+        </ul>
+
+        <h2>Recommended Countermeasures</h2>
+        <ul>
+            <li>Use bcrypt or Argon2 for password hashing.</li>
+            <li>Use prepared SQL statements.</li>
+            <li>Enforce strong password policies.</li>
+            <li>Implement rate limiting and account lockout.</li>
+            <li>Use HTTPS to protect data transmission.</li>
+        </ul>
+    </div>
+<script src="supplementary1.js"></script>
+</body>
+</html>

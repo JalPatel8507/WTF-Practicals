@@ -1,3 +1,4 @@
+
 const express = require("express");
 const mysql = require("mysql2/promise");
 const session = require("express-session");
@@ -9,6 +10,7 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 const scrypt = promisify(crypto.scrypt);
 
+// MySQL database connection
 const db = mysql.createPool({
     host: process.env.DB_HOST || "localhost",
     user: process.env.DB_USER || "root",
@@ -18,6 +20,7 @@ const db = mysql.createPool({
     connectionLimit: 10
 });
 
+// Middleware
 app.use(express.json({ limit: "10kb" }));
 app.use(express.urlencoded({ extended: false }));
 
@@ -34,15 +37,30 @@ app.use(session({
     }
 }));
 
+// Serve main website
 app.use(express.static(path.join(__dirname, "public")));
 
-// Validate username on the server.
+// Serve supplementary practical files
+const supplementaryFiles = {
+    "/supplementary1.html": "supplementary1.html",
+    "/supplementary1.css": "supplementary1.css",
+    "/supplementary1.js": "supplementary1.js",
+    "/supplementary2.html": "supplementary2.html",
+    "/supplementary2.css": "supplementary2.css",
+    "/supplementary2.js": "supplementary2.js"
+};
+
+app.get(Object.keys(supplementaryFiles), (req, res) => {
+    res.sendFile(path.join(__dirname, supplementaryFiles[req.path]));
+});
+
+// Username validation
 function validUsername(username) {
     return typeof username === "string" &&
         /^[a-zA-Z0-9_]{3,30}$/.test(username);
 }
 
-// Require uppercase, lowercase, digit and special character.
+// Password validation
 function validPassword(password) {
     return typeof password === "string" &&
         password.length >= 8 &&
@@ -53,14 +71,17 @@ function validPassword(password) {
         /[^a-zA-Z0-9]/.test(password);
 }
 
-// Store a salted password hash, never the original password.
+// Secure password hashing using scrypt
 async function hashPassword(password) {
     const salt = crypto.randomBytes(16).toString("hex");
     const key = await scrypt(password, salt, 64);
     return `${salt}:${key.toString("hex")}`;
 }
 
+// Verify password
 async function verifyPassword(password, savedHash) {
+    if (typeof savedHash !== "string") return false;
+
     const parts = savedHash.split(":");
 
     if (parts.length !== 2) return false;
@@ -75,11 +96,13 @@ async function verifyPassword(password, savedHash) {
     return crypto.timingSafeEqual(actual, expected);
 }
 
-// Health endpoint: verifies the server and database.
+// Check server and database
 app.get("/api/health", async (req, res) => {
     try {
         await db.query("SELECT 1");
-        res.json({ message: "Server and database are working." });
+        res.json({
+            message: "Server and database are working."
+        });
     } catch (error) {
         console.error("Health check:", error.message);
         res.status(500).json({
@@ -95,15 +118,13 @@ app.post("/api/register", async (req, res) => {
 
         if (!validUsername(username)) {
             return res.status(400).json({
-                message:
-                    "Username must be 3-30 characters using letters, numbers or underscore."
+                message: "Username must be 3-30 characters using letters, numbers or underscore."
             });
         }
 
         if (!validPassword(password)) {
             return res.status(400).json({
-                message:
-                    "Password must be 8-128 characters with uppercase, lowercase, number and special character."
+                message: "Password must be 8-128 characters with uppercase, lowercase, number and special character."
             });
         }
 
@@ -115,7 +136,6 @@ app.post("/api/register", async (req, res) => {
 
         const passwordHash = await hashPassword(password);
 
-        // Parameterized query prevents SQL input from becoming SQL code.
         await db.execute(
             "INSERT INTO users (username, password_hash) VALUES (?, ?)",
             [username, passwordHash]
@@ -124,6 +144,7 @@ app.post("/api/register", async (req, res) => {
         res.status(201).json({
             message: "Registration successful. Please log in."
         });
+
     } catch (error) {
         if (error.code === "ER_DUP_ENTRY") {
             return res.status(409).json({
@@ -132,6 +153,7 @@ app.post("/api/register", async (req, res) => {
         }
 
         console.error("Registration error:", error.message);
+
         res.status(500).json({
             message: "Registration failed due to a server error."
         });
@@ -166,10 +188,10 @@ app.post("/api/login", async (req, res) => {
             });
         }
 
-        // Regenerate session after successful authentication.
         req.session.regenerate((error) => {
             if (error) {
                 console.error("Session error:", error.message);
+
                 return res.status(500).json({
                     message: "Unable to start a session."
                 });
@@ -183,6 +205,7 @@ app.post("/api/login", async (req, res) => {
             req.session.save((saveError) => {
                 if (saveError) {
                     console.error("Session save:", saveError.message);
+
                     return res.status(500).json({
                         message: "Unable to save the session."
                     });
@@ -194,15 +217,17 @@ app.post("/api/login", async (req, res) => {
                 });
             });
         });
+
     } catch (error) {
         console.error("Login error:", error.message);
+
         res.status(500).json({
             message: "Login failed due to a server error."
         });
     }
 });
 
-// Middleware for protected endpoints.
+// Login protection middleware
 function requireLogin(req, res, next) {
     if (!req.session.user) {
         return res.status(401).json({
@@ -213,7 +238,7 @@ function requireLogin(req, res, next) {
     next();
 }
 
-// PROTECTED DASHBOARD
+// Protected dashboard
 app.get("/api/dashboard", requireLogin, (req, res) => {
     res.json({
         message: "Welcome to the FinSecure dashboard.",
@@ -221,7 +246,7 @@ app.get("/api/dashboard", requireLogin, (req, res) => {
     });
 });
 
-// XSS-SAFETY DEMONSTRATION
+// XSS safety demonstration
 app.post("/api/comment", requireLogin, (req, res) => {
     const { comment } = req.body || {};
 
@@ -231,7 +256,6 @@ app.post("/api/comment", requireLogin, (req, res) => {
         });
     }
 
-    // Frontend renders this value with textContent, not innerHTML.
     res.json({
         message: "Input received.",
         comment
@@ -243,6 +267,7 @@ app.post("/api/logout", (req, res) => {
     req.session.destroy((error) => {
         if (error) {
             console.error("Logout error:", error.message);
+
             return res.status(500).json({
                 message: "Unable to log out."
             });
@@ -254,11 +279,13 @@ app.post("/api/logout", (req, res) => {
             secure: false
         });
 
-        res.json({ message: "Logged out successfully." });
+        res.json({
+            message: "Logged out successfully."
+        });
     });
 });
 
-// Defensive error handler: do not return internal error details.
+// Error handling middleware
 app.use((error, req, res, next) => {
     console.error("Application error:", error.message);
 
@@ -269,21 +296,7 @@ app.use((error, req, res, next) => {
     });
 });
 
-async function startServer() {
-    try {
-        await db.query("SELECT 1");
-
-        app.listen(PORT, () => {
-            console.log(`FinSecure running at http://localhost:${PORT}`);
-            console.log("Database connection successful.");
-        });
-    } catch (error) {
-        console.error("Cannot connect to MySQL:", error.message);
-        console.error(
-            "Check XAMPP MySQL, database name, username and password."
-        );
-        process.exit(1);
-    }
-}
-
-startServer();
+// Start server without requiring MySQL at startup
+app.listen(PORT, () => {
+    console.log(`FinSecure running at http://localhost:${PORT}`);
+});
