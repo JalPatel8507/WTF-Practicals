@@ -1,0 +1,27 @@
+
+[
+    {
+        "destination": "Goa",
+        "duration": "5 Days",
+        "price": 15000,
+        "description": "Enjoy beautiful beaches and water sports."
+    },
+    {
+        "destination": "Manali",
+        "duration": "6 Days",
+        "price": 22000,
+        "description": "Explore mountains and beautiful valleys."
+    },
+    {
+        "destination": "Jaipur",
+        "duration": "3 Days",
+        "price": 12000,
+        "description": "Discover forts, palaces and culture."
+    },
+    {
+        "destination": "Kerala",
+        "duration": "5 Days",
+        "price": 18000,
+        "description": "Explore backwaters and green landscapes."
+    }
+]
