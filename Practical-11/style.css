@@ -1,0 +1,111 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #fffaf5;
+    margin: 0;
+}
+
+/* Hero Section */
+.hero {
+    background: linear-gradient(135deg, #fff0df, #ffe0bd);
+    padding: 90px 20px;
+    text-align: center;
+}
+
+.hero h1 {
+    font-size: 48px;
+    font-weight: bold;
+    color: #e85d04;
+}
+
+.hero p {
+    font-size: 18px;
+    color: #555;
+}
+
+/* Section Headings */
+section h2 {
+    color: #333;
+    font-weight: bold;
+}
+
+/* Category Cards */
+.category-card {
+    background: white;
+    padding: 25px;
+    border-radius: 12px;
+    text-align: center;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+    transition: transform 0.3s;
+}
+
+.category-card:hover {
+    transform: translateY(-5px);
+}
+
+.category-card .food-icon {
+    font-size: 45px;
+}
+
+/* Food Cards */
+.card {
+    border: none;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+    transition: transform 0.3s;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+}
+
+.food-image {
+    background-color: #ffe8d6;
+    font-size: 65px;
+    text-align: center;
+    padding: 25px;
+}
+
+/* Promotional Banner */
+.promo {
+    background-color: #e85d04;
+    color: white;
+    padding: 45px 20px;
+    text-align: center;
+    border-radius: 12px;
+}
+
+/* Buttons */
+.btn-orange {
+    background-color: #e85d04;
+    color: white;
+    border: none;
+}
+
+.btn-orange:hover {
+    background-color: #c94c00;
+    color: white;
+}
+
+/* Footer */
+footer {
+    background-color: #252525;
+    color: white;
+    padding: 20px;
+    text-align: center;
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 576px) {
+    .hero {
+        padding: 55px 15px;
+    }
+
+    .hero h1 {
+        font-size: 34px;
+    }
+
+    .hero p {
+        font-size: 16px;
+    }
+}
